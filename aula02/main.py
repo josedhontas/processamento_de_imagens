@@ -4,14 +4,14 @@ from PIL import Image
 def triangulo(tam):
     branco = (255, 255, 255)
     preto = (0, 0, 0)
-    imagem = Image.new("RGB", (tam, tam), branco)
+    image = Image.new("RGB", (tam, tam), branco)
 
     for x in range(tam):
         for y in range(tam):
             if x < y:
-                imagem.putpixel((x,y), preto)
+                image.putpixel((x,y), preto)
     
-    return imagem
+    return image
 
 def bandeira_franca(altura):
     largura = 3*altura//2
@@ -36,6 +36,7 @@ def bandeira_japao(altura):
     vermelho = (173, 35, 51)
 
     raio = 3 * altura // 10
+    print(raio)
     centro = (largura // 2, altura // 2)
     image = Image.new("RGB", (largura, altura), branco)
 
@@ -46,11 +47,40 @@ def bandeira_japao(altura):
 
     return image
 
+
+def bandeira_brasil(altura):
+    GREEN = (0, 156, 59)
+    YELLOW = (255, 223, 0)
+    BLUE = (0, 39, 118)
+    largura = 10 * altura // 7
+    margem = 17 * altura // 140
+    centro = (largura // 2, altura // 2)
+    radius = altura // 4
+
+    image = Image.new('RGB', (largura, altura), GREEN)
+
+    for x in range(margem, largura - margem):
+        for y in range(margem, altura - margem):
+            if x <= centro[0] and y <= centro[1] and (centro[1] - y) <= 0.64 * (x - margem):
+                image.putpixel((x,y), YELLOW)
+            if x > centro[0] and y <= centro[1] and (centro[1] - y) <= -0.64 * (x - centro[0]) + centro[1] - margem:
+                image.putpixel((x,y), YELLOW)
+            if x <= centro[0] and y > centro[1] and (y - centro[1]) <= 0.64 * (x - margem):
+                image.putpixel((x,y), YELLOW)
+            if x > centro[0] and y > centro[1] and (y - centro[1]) <= -0.64 * (x - centro[0]) + centro[1] - margem:
+                image.putpixel((x,y), YELLOW)
+    
+    for x in range(centro[0] - radius, centro[0] + radius):
+        for y in range(centro[1] - radius, centro[1] + radius):
+            if (x - centro[0]) ** 2 + (y - centro[1]) ** 2 <= radius ** 2:
+                image.putpixel((x, y), BLUE)
+    return image
+
                 
 
 if __name__ == "__main__":
     #t = triangulo(700)
     #t.show()
 
-    u = bandeira_japao(700)
+    u = bandeira_brasil(700)
     u.show()
